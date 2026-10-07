@@ -1008,3 +1008,40 @@ async def test_async_reconnect_leaves_a_young_reconnect_alone(hass: HomeAssistan
         young_task.cancel()
         with suppress(asyncio.CancelledError):
             await young_task
+
+
+def test_missed_package_count_fallbacks(hass: HomeAssistant) -> None:
+    """Test coordinator missed_package_count property with and without overrides."""
+    device_info = DeviceInformation(name="Purifier", model="AC3858/50", device_id="id123", host="1.2.3.4")
+    client = MagicMock()
+    coord1 = PhilipsAirPurifierCoordinator(hass, client, "1.2.3.4", device_info, missed_package_count=9)
+    assert coord1.missed_package_count == 9
+
+    coord2 = PhilipsAirPurifierCoordinator(hass, client, "1.2.3.4", device_info)
+    assert coord2.missed_package_count == coord2.model_config.missed_package_count
+
+
+async def test_schedule_reconnect_retry_lifecycle(hass: HomeAssistant) -> None:
+    """Test _schedule_reconnect_retry shutdown check, task replacement, and execution."""
+    coordinator = _make_coordinator(hass)
+
+    coordinator._shutting_down = True
+    coordinator._schedule_reconnect_retry(10)
+    assert coordinator._reconnect_retry_task is None
+
+    coordinator._shutting_down = False
+    prior_task = MagicMock()
+    prior_task.done.return_value = False
+    coordinator._reconnect_retry_task = prior_task
+
+    with patch.object(coordinator, "_async_retry_reconnect", AsyncMock()):
+        coordinator._schedule_reconnect_retry(10)
+        prior_task.cancel.assert_called_once()
+        assert coordinator._reconnect_retry_task is not None
+
+    with (
+        patch("asyncio.sleep", AsyncMock()),
+        patch.object(coordinator, "_async_reconnect", AsyncMock()) as mock_reconnect,
+    ):
+        await coordinator._async_retry_reconnect(5)
+        mock_reconnect.assert_awaited_once()

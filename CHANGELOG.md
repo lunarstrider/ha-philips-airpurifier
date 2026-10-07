@@ -7,6 +7,18 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 
 ## [Unreleased]
 
+## [2026.10.0] - 2026-10-08
+
+### Added
+
+- Added support for **AC3854/25** (4000i, Thailand/Asia variant) with five preset modes (`auto`, `sleep`, `speed_1`, `speed_2`, `turbo`), four fan speeds, display backlight and brightness lights, gas preferred index select, and child lock switch ([#122](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/122)).
+
+### Fixed
+
+- Eliminated Python 3.14 compile-time `SyntaxWarning: 'return' in a 'finally' block` originating from the aiocoap tinydtls transport by preloading the transport in the off-loop worker thread under a scoped warning filter ([#127](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/127)).
+- Replaced deprecated `DeviceEntry.config_entries` and direct `.devices.values()` access in diagnostics with `dr.async_entries_for_config_entry()` to remain fully compatible with Home Assistant 2026.10.0+ integration quality scale requirements.
+- Updated schema validation and type annotations to support Home Assistant 2026.10.0+ (`probatio` schema builder, `RepairsFlowResult`, and relocated entity platform constants).
+
 ## [2026.9.2] - 2026-09-30
 
 ### Fixed
@@ -191,6 +203,8 @@ Latest release prior to this changelog being introduced. See the
 [GitHub releases](https://github.com/ruaan-deysel/ha-philips-airpurifier/releases)
 for the history of earlier versions.
 
-[Unreleased]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.6.1...HEAD
+[Unreleased]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.10.0...HEAD
+[2026.10.0]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.9.2...v2026.10.0
+[2026.9.2]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.9.1...v2026.9.2
 [2026.6.1]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.6.0...v2026.6.1
 [2026.6.0]: https://github.com/ruaan-deysel/ha-philips-airpurifier/releases/tag/v2026.6.0

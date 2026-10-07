@@ -33,6 +33,13 @@ def _entity(
     )
 
 
+def test_entity_registry_identity_none_when_no_unique_id() -> None:
+    """Return None when entity has no unique ID."""
+    from custom_components.philips_airpurifier.repairs import _entity_registry_identity
+
+    assert _entity_registry_identity(SimpleNamespace(unique_id=None)) is None
+
+
 async def test_health_check_allows_same_unique_id_across_domains(
     hass: HomeAssistant,
 ) -> None:

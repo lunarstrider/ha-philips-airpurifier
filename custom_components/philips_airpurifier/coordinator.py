@@ -185,7 +185,7 @@ class PhilipsAirPurifierCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         resting = base[-1][1]
 
         # Restore the user's last-known value for the nudged key when we have it.
-        if self.data is not None and self.data.get(key) is not None:
+        if self.data and self.data.get(key) is not None:
             resting = self.data[key]
 
         # The transient write must differ from the resting value, otherwise the
@@ -222,7 +222,7 @@ class PhilipsAirPurifierCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             # This firmware never answers a status read; ongoing state comes
             # from the observe stream. Return the last pushed status if we have
             # it, otherwise force one push via a nudge.
-            if self.data is not None:
+            if self.data:
                 self._mark_available()
                 return self.data
             try:
@@ -406,7 +406,7 @@ class PhilipsAirPurifierCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             self._start_observing()
             return
 
-        if not self._update_watchdog_enabled and self.data is not None:
+        if not self._update_watchdog_enabled and self.data:
             self._last_update = asyncio.get_event_loop().time()
             self._mark_available()
             self._start_observing()

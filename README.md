@@ -150,7 +150,7 @@ If your device changes IP addresses:
 | **AC0950**   | AC0950, AC0951                             | Compact Air Purifiers   |
 | **AC1214**   | AC1214                                     | Compact Air Purifiers   |
 | **AC1715**   | AC1715                                     | Compact Air Purifiers   |
-| **AC2200**   | AC2210/10, AC2220/10, AC2221/13             | PureProtect Quiet 2200  |
+| **AC2200**   | AC2210/10, AC2220/10, AC2221/13            | PureProtect Quiet 2200  |
 | **AC2729**   | AC2729                                     | Mid-range Air Purifiers |
 | **AC2889**   | AC2889                                     | Mid-range Air Purifiers |
 | **AC2936**   | AC2936, AC2939, AC2958, AC2959             | Mid-range Air Purifiers |
@@ -161,7 +161,7 @@ If your device changes IP addresses:
 | **AC3420**   | AC3420, AC3421                             | Advanced Air Purifiers  |
 | **AC3737**   | AC3737                                     | Advanced Air Purifiers  |
 | **AC3829**   | AC3829, AC3836                             | Advanced Air Purifiers  |
-| **AC3854**   | AC3854/50, AC3854/51                       | Advanced Air Purifiers  |
+| **AC3854**   | AC3854/25, AC3854/50, AC3854/51            | Advanced Air Purifiers  |
 | **AC3858**   | AC3858/50, AC3858/51, AC3858/83, AC3858/86 | Advanced Air Purifiers  |
 | **AC4220**   | AC4220, AC4221, AC4236                     | Premium Air Purifiers   |
 | **AC4550**   | AC4550, AC4558                             | Premium Air Purifiers   |

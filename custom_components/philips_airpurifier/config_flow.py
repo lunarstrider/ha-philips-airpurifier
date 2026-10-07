@@ -3,10 +3,17 @@
 import ipaddress
 import logging
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from philips_airctrl import CoAPClient
-import voluptuous as vol
+
+if TYPE_CHECKING:
+    import probatio as vol
+else:
+    try:
+        import probatio as vol
+    except ImportError:  # pragma: no cover
+        import voluptuous as vol
 
 from homeassistant import config_entries, exceptions
 from homeassistant.config_entries import ConfigFlowResult, OptionsFlowWithReload

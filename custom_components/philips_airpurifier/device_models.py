@@ -652,6 +652,16 @@ _CONFIG_AC385X51 = DeviceModelConfig(
     selects=[PhilipsApi.GAS_PREFERRED_INDEX],
 )
 
+# AC3854/25 config (TH/Asia: five /50 modes without Allergy Sleep, and /51 child lock)
+_CONFIG_AC385X25 = DeviceModelConfig(
+    api_generation=ApiGeneration.GEN1,
+    preset_modes=_AC385X50_PRESET_MODES,
+    speeds=_AC385X50_SPEEDS,
+    switches=[PhilipsApi.CHILD_LOCK],
+    lights=[PhilipsApi.DISPLAY_BACKLIGHT, PhilipsApi.LIGHT_BRIGHTNESS],
+    selects=[PhilipsApi.GAS_PREFERRED_INDEX],
+)
+
 # AC4220/AC4221 config (same as AC32xx but with explicit selects)
 _CONFIG_AC4220 = DeviceModelConfig(
     api_generation=ApiGeneration.GEN3,
@@ -1266,6 +1276,7 @@ DEVICE_MODELS: dict[str, DeviceModelConfig] = {
     # =========================================================================
     # AC385x/50 family
     # =========================================================================
+    FanModel.AC3854_25: _CONFIG_AC385X25,
     FanModel.AC3854_50: _CONFIG_AC385X50,
     FanModel.AC3858_50: _CONFIG_AC385X50,
     # =========================================================================
