@@ -1,20 +1,22 @@
-name: Lint
+name: CI
 
-"on":
-  workflow_dispatch:
+on:
   push:
-    branches:
-      - "main"
+    branches: [main]
   pull_request:
-    branches:
-      - "main"
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   ruff:
-    name: "Ruff"
-    runs-on: "ubuntu-latest"
+    name: Lint
+    runs-on: ubuntu-latest
     steps:
       - name: Configure git default branch
         run: git config --global init.defaultBranch main
@@ -22,6 +24,8 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+        with:
+          persist-credentials: false
       - name: Configure git safe directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
