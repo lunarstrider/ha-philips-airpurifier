@@ -3,6 +3,10 @@
   "pythonVersion": "3.14",
   "typeCheckingMode": "strict",
   "reportMissingTypeStubs": "none",
+  // Home Assistant component packages re-export their public names (e.g.
+  // homeassistant.components.fan.FanEntityFeature) without __all__; importing
+  // from the package is the documented public API, not a private import.
+  "reportPrivateImportUsage": "none",
   "reportIncompatibleVariableOverride": "none",
   "reportOptionalMemberAccess": "warning",
   "reportOptionalSubscript": "warning",
