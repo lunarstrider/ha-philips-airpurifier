@@ -1,5 +1,22 @@
 # AI Agent Instructions
 
+## Mandatory Development Workflow for AI Agents
+
+All AI coding assistants (Claude Code, Gemini, GitHub Copilot, Cursor, Roo, Devin, etc.) MUST strictly adhere to the following workflow when working on this repository:
+
+1. Issue-First Requirement: Never start writing code or creating pull requests without an existing GitHub Issue.
+2. Issue Template: Issues must be created using the official Issue Forms (`01-bug-report.yml` for bugs or `02-enhancement-request.yml` for enhancements).
+3. CodeRabbit AI Plan: Every issue must have a generated Coding Plan from CodeRabbit AI (`@coderabbitai plan`). AI agents must read and implement strictly according to the approved plan.
+4. Branch Discipline: Always create and work on a dedicated branch (`feat/<issue-id>-<description>` or `fix/<issue-id>-<description>`). NEVER commit directly to `main`.
+5. Documentation & Changelog: Update `CHANGELOG.md` under `## [Unreleased]` for any user-facing or architectural changes.
+6. Local Verification: Run all test, lint, format, and typecheck commands locally before committing. All tests must pass with zero errors and zero warnings.
+7. PR Template Completion: Always use `.github/PULL_REQUEST_TEMPLATE.md`. Complete all fields, link the issue using `Closes #<id>` or `Fixes #<id>` when the PR fully resolves it, or `Part of #<id>` for partial work (only maintainers with write access may write `None`, for housekeeping), and check all Pre-Submission Governance boxes with real terminal output.
+8. Draft PR First: ALWAYS open pull requests as DRAFT (`gh pr create --draft`).
+9. CI Verification: Wait for CI workflows to run on the draft PR and verify that all status checks pass.
+10. Ready for Review: Only mark the PR as ready for review (`gh pr ready`) once all checks pass and all due diligence is verified.
+11. Review Clearance: Review and resolve all CodeRabbit AI and GitHub Copilot comments. Ensure Codecov reports show zero errors, zero warnings, and no coverage drop.
+
+
 This document provides guidance for AI coding agents working on this Home Assistant custom integration project.
 
 ## Project Overview
@@ -100,10 +117,10 @@ If a developer requests something that contradicts these instructions:
 
 **Rules:**
 
-- ❌ **NEVER** create random markdown files in code directories
-- ❌ **NEVER** create documentation in `.github/` unless it's a GitHub-specified file
-- ✅ **ALWAYS ask first** before creating permanent documentation
-- ✅ **Prefer module docstrings** over separate markdown files
+- **NEVER** create random markdown files in code directories
+- **NEVER** create documentation in `.github/` unless it's a GitHub-specified file
+- **ALWAYS ask first** before creating permanent documentation
+- **Prefer module docstrings** over separate markdown files
 
 See `.github/copilot-instructions.md` for detailed documentation strategy.
 
@@ -125,8 +142,8 @@ See `.github/copilot-instructions.md` for commit message examples and context mo
 
 **Third-party libraries (PyPI):**
 
-- ✅ Prefer existing PyPI libraries when maintained and fit the use case
-- ✅ Build custom API client when:
+-  Prefer existing PyPI libraries when maintained and fit the use case
+-  Build custom API client when:
   - Device/service uses simple REST API or GraphQL (HTTP, JSON)
   - Available libraries are unmaintained, bloated, or poorly designed
   - Using aiohttp + json is more maintainable than a framework
@@ -142,9 +159,9 @@ See `.github/copilot-instructions.md` for commit message examples and context mo
 
 As an AI agent, **aim for Silver or Gold Quality Scale** when generating code:
 
-- ✅ **Always implement:** Type hints, async patterns, proper error handling, service registration in `async_setup()`, diagnostics with `async_redact_data()`, device info
-- 🎯 **When applicable:** Config flow with validation, reauth flow, discovery support, repair flows
-- 📋 **Can defer:** Multiple config entries, advanced discovery, YAML import, extensive test coverage
+- **Always implement:** Type hints, async patterns, proper error handling, service registration in `async_setup()`, diagnostics with `async_redact_data()`, device info
+- **When applicable:** Config flow with validation, reauth flow, discovery support, repair flows
+- **Can defer:** Multiple config entries, advanced discovery, YAML import, extensive test coverage
 
 **Developer expectation:** Generate production-ready code. Implement HA standards with reasonable effort.
 
@@ -376,7 +393,7 @@ See `.github/instructions/repairs.instructions.md` for comprehensive patterns.
 
 **YAML Configuration:**
 
-⚠️ **DEPRECATED** for integrations communicating with devices/services (ADR-0010)
+️ **DEPRECATED** for integrations communicating with devices/services (ADR-0010)
 
 - New integrations MUST use config flow
 - Existing YAML integrations should migrate to config flow
@@ -487,7 +504,7 @@ See `.github/instructions/tests.instructions.md` for comprehensive testing patte
 
 **How to warn:**
 
-> "⚠️ This change will modify the entity ID format from `sensor.device_name` to `sensor.device_name_sensor`. Existing users' automations and dashboards will break. Should I proceed, or would you prefer a migration path?"
+> "️ This change will modify the entity ID format from `sensor.device_name` to `sensor.device_name_sensor`. Existing users' automations and dashboards will break. Should I proceed, or would you prefer a migration path?"
 
 **When breaking changes are necessary:**
 
@@ -580,3 +597,37 @@ See `.github/copilot-instructions.md` for detailed workflow guidance.
 - [Pyright Configuration](https://microsoft.github.io/pyright/#/configuration) - Type checker documentation
 - [pytest Documentation](https://docs.pytest.org/) - Testing framework
 - See `CONTRIBUTING.md` for contribution guidelines
+
+## Issue and Pull Request Governance
+
+These rules apply to every contributor, including AI coding agents. The full org-wide rules are in
+[GOVERNANCE.md](https://github.com/tinkerologie/.github/blob/main/GOVERNANCE.md).
+
+1. **Issue first.** Open an issue with the bug or enhancement template before opening a pull
+   request. Keep the title prefix `[Bug]:` or `[Enhancement]:`, followed by a space and the title.
+   Automation applies the `bug` or `enhancement` label when it can tell the type, and CodeRabbit
+   then posts a Coding Plan on the issue. Implement from that plan. The labeler skips issues labeled
+   `question`, `duplicate`, `invalid`, `wontfix`, or `no-type`, and never re-adds a type label that
+   a maintainer removed.
+2. **Link the issue.** In the PR's **Related Issues** section, write `Closes #<number>` (or `Fixes`
+   or `Resolves`) when the PR completely resolves the issue; these keywords close it on merge. Use
+   `Part of #<number>` or `Related to #<number>` for partial work. The linked issue must exist; an
+   issue in another public repository (`owner/repo#123`) is fine. Only authors with write access or
+   higher (maintainers) may write `None`, for housekeeping such as CI,
+   documentation, or dependency updates; PR governance rejects `None` from everyone else.
+3. **One change at a time.** Contributors without write access can have at most 2 open, non-draft
+   pull requests here. GitHub enforces this limit, and draft pull requests do not count toward it.
+   Do not open PRs that edit the same files as another open PR, such as `CHANGELOG.md`,
+   translations, `README.md`, or generated bundles. Wait for the first to merge, rebase, then
+   continue.
+4. **Act on the Tinkerologie-Bot report.** When PR governance fails, Tinkerologie-Bot posts one comment
+   listing every problem as a numbered item. Fix each item by editing the PR description or pushing
+   the missing change; the check re-runs and the comment updates to passed.
+5. **Rebase before review.** Rebase on `main` before marking a PR ready for review.
+6. **Resolve conflicts first.** When a PR gets the `conflicts` label, rebase on `main`,
+   resolve the conflicts (keep every `CHANGELOG.md` entry under `[Unreleased]`), re-run the tests,
+   and force-push before doing any other work.
+7. **Stale items.** Issues and PRs with no activity for 14 days are labeled `stale` and closed 30
+   days later unless there is new activity. These labels are exempt:
+   - Issues: `pinned`, `security`, `confirmed`, `work-in-progress`, `priority: critical`, `priority: high`.
+   - Pull requests: `pinned`, `security`, `work-in-progress`.

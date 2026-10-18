@@ -7,6 +7,21 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 
 ## [Unreleased]
 
+### Security
+
+- Development tooling only (not shipped in the integration): npm `overrides` move `katex` to 0.18 (GHSA-238p-pmpm-9mq7, low) and `smol-toml` to 1.9 (GHSA-r4xh-jqrq-34v2, moderate), both pulled in by `markdownlint-cli2`, whose latest release still pins the vulnerable versions.
+
+### Changed
+
+- Pull requests get path labels and at most one type label, `bug` or `enhancement`, from the shared tinkerologie PR labeler. Dependabot pull requests whose largest update is a patch or minor version merge automatically once the checks and commit statuses on their head commit have finished without a failure (a Codecov check that is still pending is not waited for; a Codecov failure blocks); majors, and pull requests with open review threads, stay for review.
+- Release workflows hardened (least-privilege job permissions, no expressions in shell scripts, no persisted checkout credentials, no dependency caches); scheduled workflows run on Australia/Brisbane time. LICENSE now contains the complete Apache License 2.0 text.
+- Workflow layout tidied after the release hardening (no behaviour change): blank-line layout restored in `ci.yml`.
+- Tinkerologie-Bot governance report updated to v1.4.3: an older run can no longer post a stale report after a newer run passed. Workflow formatting tidied.
+- Repository standardised to the tinkerologie layout (STANDARDS.md in tinkerologie/.github): workflows renamed to the standard set (CI, Validate, Release, PR Governance, ...), every action pinned to a commit SHA, shared Dependabot, `.editorconfig`, `.gitattributes` and `CODEOWNERS` files, and organization-wide labels and community files.
+- Tinkerologie-Bot's comment is now a readable "Pull request checklist": each problem is a numbered heading with plain-English guidance and its items listed underneath, and report updates for a pull request are serialised so an older run can never overwrite a newer one.
+- Contribution governance: issues without a `bug` or `enhancement` label are labeled automatically when their type can be determined (issues labeled `question`, `duplicate`, `invalid`, `wontfix`, or `no-type` are skipped), so CodeRabbit can plan them. Pull requests that conflict with the default branch are labeled, and their authors are notified in a comment. Stale issues and pull requests are labeled after 14 days without activity and closed 30 days later. PR governance now re-validates a human-authored, non-draft PR when a bot such as CodeRabbit edits its description, instead of skipping the check and reporting a pass, only maintainers with write access may use `None` instead of linking an issue, and a link to an issue that does not exist now fails the check.
+- Tinkerologie-Bot now posts one comment on pull requests that fail PR governance, listing every problem to fix, and updates it once they are fixed. PR governance runs from the default branch's workflow (`pull_request_target`), so a pull request cannot change its own check.
+
 ### Fixed
 
 - Fixed `ImportError` on setup (e.g. `cannot import name 'FanEntityFeature'`) by importing platform classes and constants from the Home Assistant component packages instead of their `.const` submodules.
@@ -15,11 +30,11 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 
 ### Added
 
-- Added support for **AC3854/25** (4000i, Thailand/Asia variant) with five preset modes (`auto`, `sleep`, `speed_1`, `speed_2`, `turbo`), four fan speeds, display backlight and brightness lights, gas preferred index select, and child lock switch ([#122](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/122)).
+- Added support for **AC3854/25** (4000i, Thailand/Asia variant) with five preset modes (`auto`, `sleep`, `speed_1`, `speed_2`, `turbo`), four fan speeds, display backlight and brightness lights, gas preferred index select, and child lock switch ([#122](https://github.com/tinkerologie/ha-philips-airpurifier/issues/122)).
 
 ### Fixed
 
-- Eliminated Python 3.14 compile-time `SyntaxWarning: 'return' in a 'finally' block` originating from the aiocoap tinydtls transport by preloading the transport in the off-loop worker thread under a scoped warning filter ([#127](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/127)).
+- Eliminated Python 3.14 compile-time `SyntaxWarning: 'return' in a 'finally' block` originating from the aiocoap tinydtls transport by preloading the transport in the off-loop worker thread under a scoped warning filter ([#127](https://github.com/tinkerologie/ha-philips-airpurifier/issues/127)).
 - Replaced deprecated `DeviceEntry.config_entries` and direct `.devices.values()` access in diagnostics with `dr.async_entries_for_config_entry()` to remain fully compatible with Home Assistant 2026.10.0+ integration quality scale requirements.
 - Updated schema validation and type annotations to support Home Assistant 2026.10.0+ (`probatio` schema builder, `RepairsFlowResult`, and relocated entity platform constants).
 
@@ -63,7 +78,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
   global fallback. This lets models like the **AC3039** stay online longer in
   standby without forcing a broader change for every device, while still
   keeping the default watchdog tolerance at 3 missed packages globally
-  ([#92](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/92)).
+  ([#92](https://github.com/tinkerologie/ha-philips-airpurifier/issues/92)).
 
 ## [2026.9.0] - 2026-09-04
 
@@ -79,7 +94,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
   stalls during reconnect. Coordinator CoAP calls are now time-bounded and
   stale reconnect tasks are treated as wedged, so retries and availability
   recovery continue as expected
-  ([#101](https://github.com/ruaan-deysel/ha-philips-airpurifier/pull/101)).
+  ([#101](https://github.com/tinkerologie/ha-philips-airpurifier/pull/101)).
 - Rotation (oscillation) control is available again on the **AMF870**
   (Series 8000i 2-in-1). The model configuration listed only the target
   temperature under its numbers, which replaced rather than extended the AMF
@@ -106,7 +121,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 - Added a per-device option to enable or disable the update watchdog. This is
   useful for models that rely on status nudges and can remain idle for long
   periods without emitting push updates
-  ([#100](https://github.com/ruaan-deysel/ha-philips-airpurifier/pull/100)).
+  ([#100](https://github.com/tinkerologie/ha-philips-airpurifier/pull/100)).
 - Support for the **CX7550/01** (Philips oscillating tower fan). It uses Gen3
   CoAP and is fan-only (no heater). Exposes all 12 manual fan speeds, the Auto,
   Sleep and Natural preset modes, on/off oscillation, the display backlight
@@ -124,11 +139,11 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 - Support for the **HU4209/00** (Philips Evaporative Humidifier Series 4000).
   It uses Gen3 CoAP and reuses the HU1509/HU1510 preset and speed mappings,
   differing only by the absence of ambient light mode
-  ([#63](https://github.com/ruaan-deysel/ha-philips-airpurifier/pull/63)).
+  ([#63](https://github.com/tinkerologie/ha-philips-airpurifier/pull/63)).
 - Support for the **AC2210** family (PureProtect Quiet 2200 series, e.g.
   `AC2210/10`) by reusing the AC2221 device configuration; previously these
   devices were detected but rejected with `model_unsupported`
-  ([#59](https://github.com/ruaan-deysel/ha-philips-airpurifier/pull/59)).
+  ([#59](https://github.com/tinkerologie/ha-philips-airpurifier/pull/59)).
 
 ## [2026.6.2] - 2026-06-14
 
@@ -136,10 +151,10 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 
 - Coordinator reconnect handling now uses exponential backoff retries
   (5 seconds up to a 60-second cap) after reconnect failures, instead of
-  waiting for the watchdog interval to recover. ([#51](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/51))
+  waiting for the watchdog interval to recover. ([#51](https://github.com/tinkerologie/ha-philips-airpurifier/issues/51))
 - Devices are no longer marked unavailable immediately when the CoAP
   observation stream ends; unavailable is now set only when reconnect attempts
-  actually fail, reducing transient warning noise. ([#51](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/51))
+  actually fail, reducing transient warning noise. ([#51](https://github.com/tinkerologie/ha-philips-airpurifier/issues/51))
 
 ## [2026.6.1] - 2026-06-12
 
@@ -147,7 +162,7 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 
 - DHCP discovery now matches already configured devices by MAC address (or
   host) **before** opening a CoAP connection
-  ([#8](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/8)).
+  ([#8](https://github.com/tinkerologie/ha-philips-airpurifier/issues/8)).
   This fixes two long-standing problems:
   - A purifier that received a new IP address from the router stayed
     unavailable forever, because the discovery flow had to connect to the
@@ -176,12 +191,12 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
   matching the Home Assistant `SelectEntity` contract.
 - The fan mode select is no longer a configuration entity, so it appears in
   device automation pickers again
-  ([#2](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/2)).
+  ([#2](https://github.com/tinkerologie/ha-philips-airpurifier/issues/2)).
 - Declared the correct minimum Home Assistant version (2026.4.0, matching the
   documented requirement) in `hacs.json` and the README badge. Home Assistant
   releases before 2026.3 run Python 3.13, where the integration fails to load
   with a syntax error
-  ([#45](https://github.com/ruaan-deysel/ha-philips-airpurifier/issues/45));
+  ([#45](https://github.com/tinkerologie/ha-philips-airpurifier/issues/45));
   the previous HACS minimum of 2025.1.0 allowed broken installs.
 
 ### Changed
@@ -204,11 +219,11 @@ and this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM
 ## [2026.6.0] - 2026-06-08
 
 Latest release prior to this changelog being introduced. See the
-[GitHub releases](https://github.com/ruaan-deysel/ha-philips-airpurifier/releases)
+[GitHub releases](https://github.com/tinkerologie/ha-philips-airpurifier/releases)
 for the history of earlier versions.
 
-[Unreleased]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.10.0...HEAD
-[2026.10.0]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.9.2...v2026.10.0
-[2026.9.2]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.9.1...v2026.9.2
-[2026.6.1]: https://github.com/ruaan-deysel/ha-philips-airpurifier/compare/v2026.6.0...v2026.6.1
-[2026.6.0]: https://github.com/ruaan-deysel/ha-philips-airpurifier/releases/tag/v2026.6.0
+[Unreleased]: https://github.com/tinkerologie/ha-philips-airpurifier/compare/v2026.10.0...HEAD
+[2026.10.0]: https://github.com/tinkerologie/ha-philips-airpurifier/compare/v2026.9.2...v2026.10.0
+[2026.9.2]: https://github.com/tinkerologie/ha-philips-airpurifier/compare/v2026.9.1...v2026.9.2
+[2026.6.1]: https://github.com/tinkerologie/ha-philips-airpurifier/compare/v2026.6.0...v2026.6.1
+[2026.6.0]: https://github.com/tinkerologie/ha-philips-airpurifier/releases/tag/v2026.6.0
